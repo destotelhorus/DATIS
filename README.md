@@ -1,3 +1,9 @@
+# Changes done by destotelhorus
+I changed **datis-station** to use STDIN with an arbitrary target server. This allows the injection of livestreams from radio stations or ATC via liveatc.net onto DCS SRS frequencies.
+
+Example:
+> ffmpeg -i http://d.liveatc.net/ktyr2_app -acodec libopus -f ogg pipe:1 | ./dcs-radio-station --freq 110000000 --server 1.2.3.4:5678
+
 # DATIS
 
 DCS World Automatic Terminal Information Service (ATIS) broadcasted through [Simple Radio Standalone](https://github.com/ciribob/DCS-SimpleRadioStandalone).
