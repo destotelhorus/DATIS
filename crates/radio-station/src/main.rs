@@ -4,6 +4,7 @@
 extern crate log;
 
 mod radio_station;
+mod input;
 
 use std::str::FromStr;
 
@@ -27,22 +28,17 @@ pub async fn main() -> Result<(), anyhow::Error> {
                 .takes_value(true),
         )
         .arg(
-            clap::Arg::with_name("loop")
-                .short("l")
-                .long("loop")
-                .help("Enables endlessly looping the audio file(s)"),
-        )
-        .arg(
-            clap::Arg::with_name("PATH")
-                .help("Sets the path audio file(s) should be read from")
-                .required(true)
-                .index(1),
+            clap::Arg::with_name("server")
+                .short("s")
+                .long("server")
+                .help("Server and Port of SRS Server, for example: srs.taw.rocks:5002")
+                .takes_value(true)
+                .required(true),
         )
         .get_matches();
 
     // Calling .unwrap() is safe here because "INPUT" is required
-    let path = matches.value_of("PATH").unwrap();
-    let should_loop = matches.is_present("loop");
+    let server = matches.value_of("server").unwrap();
     let freq = matches.value_of("frequency").unwrap();
     let freq = if let Ok(n) = u64::from_str(freq) {
         n
@@ -57,7 +53,7 @@ pub async fn main() -> Result<(), anyhow::Error> {
     station.set_port(5002);
 
     info!("Start playing ...");
-    station.play(path, should_loop).await?;
+    station.play(server).await?;
 
     Ok(())
 }
